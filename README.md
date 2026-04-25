@@ -11,7 +11,7 @@
 
 ## Live Dashboard
 
-**[View Interactive Dashboard]([https://Innocent-Ndagijimana.github.io/gis-water-access-rwamagana](https://inno100sami.github.io/GIS-Water-Access-Rwamagana_2021/))**
+**[View Interactive Dashboard](https://inno100sami.github.io/GIS-Water-Access-Rwamagana_2021/)**
 
 The dashboard visualises all key research findings interactively — including sector-level water coverage maps, public water point distribution, tariff comparisons, reliability and quantity analysis.
 
