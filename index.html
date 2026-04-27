@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>GIS Water Access – Rwamagana District | MSc Thesis Dashboard</title>
   <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'Segoe UI',system-ui,sans-serif;background:#f1f5f9;color:#1e293b}
@@ -27,6 +29,8 @@
     .callout.warn strong{color:#92400e}
     .callout.red{background:#fff1f2;border-color:#fca5a5}
     .callout.red strong{color:#b91c1c}
+    .insight{background:#f0f9ff;border-left:3px solid #38bdf8;border-radius:0 0 8px 8px;padding:.8rem 1.1rem;margin-top:.9rem;font-size:.87rem;color:#334155;line-height:1.7}
+    .insight strong{color:#0369a1}
     footer{text-align:center;padding:2rem;font-size:.8rem;color:#94a3b8;border-top:1px solid #e2e8f0;margin-top:3rem}
     footer a{color:#0d9488}
     @media(max-width:600px){.hero h1{font-size:1.25rem}.grid-2,.grid-3{grid-template-columns:1fr}}
@@ -62,8 +66,14 @@
     coverage below 50%: Muyumbu (29%), Nyakaliro (37%), Nzige (38%), Karenge (41%), Muhazi (44%)
     and Gahengeri (47%). These sectors serve as priority targets for infrastructure investment.
   </div>
-  <div class="chart-card"><div id="fig_coverage" style="height:520px"></div></div>
-  <div class="chart-card"><div id="fig_population" style="height:520px"></div></div>
+  <div class="chart-card">
+    <div id="fig_coverage" style="height:520px"></div>
+    <div class="insight"><strong>Reading this chart:</strong> Bars are colour-coded by coverage tier — <span style="color:#ef4444;font-weight:600">red (&lt;40%)</span>, <span style="color:#f59e0b;font-weight:600">amber (40–49%)</span>, <span style="color:#0d9488;font-weight:600">teal (50–74%)</span>, <span style="color:#22c55e;font-weight:600">green (≥75%)</span>. The dotted line marks the 100% national target. <strong>Muyumbu</strong> records the lowest coverage at 29%, meaning nearly 3 in 4 residents have no access. <strong>Kigabiro</strong> and <strong>Munyaga</strong> achieve full 100% coverage. Six sectors remain critically below 50% — these are the district's highest-priority investment zones under the NST1 2017–2024 framework.</div>
+  </div>
+  <div class="chart-card">
+    <div id="fig_population" style="height:520px"></div>
+    <div class="insight"><strong>Reading this chart:</strong> Each bar represents the total sector population split into <span style="color:#0d9488;font-weight:600">served (teal)</span> and <span style="color:#ef4444;font-weight:600">unserved (red)</span> residents. <strong>Kigabiro</strong> has the largest served population (38,865 — 100% of its 38,865 residents). <strong>Muyumbu</strong>, despite having 32,755 people, leaves <strong>23,256 unserved</strong> — the highest absolute unserved count in the district. Combined, the six critically underserved sectors account for approximately 82,000 people still lacking safe water access.</div>
+  </div>
 </div>
 
 <!-- SECTION 2 -->
@@ -75,10 +85,19 @@
     large populations — a critical infrastructure gap requiring urgent attention.
   </div>
   <div class="grid-2">
-    <div class="chart-card"><div id="fig_pwp" style="height:500px"></div></div>
-    <div class="chart-card"><div id="fig_scatter" style="height:500px"></div></div>
+    <div class="chart-card">
+      <div id="fig_pwp" style="height:500px"></div>
+      <div class="insight"><strong>Reading this chart:</strong> <strong>Munyaga</strong> leads with 80 public water points, directly supporting its 100% coverage. <strong>Muyumbu</strong> and <strong>Nzige</strong> each have only 12 points — the lowest in the district — despite serving large populations. <strong>Fumbwe</strong> and <strong>Rubona</strong> have 45 and 51 points respectively, correlating with their above-average 73% and 76% coverage rates. This distribution confirms that physical infrastructure density is a primary determinant of service coverage.</div>
+    </div>
+    <div class="chart-card">
+      <div id="fig_scatter" style="height:500px"></div>
+      <div class="insight"><strong>Reading this chart:</strong> Each bubble represents a sector; bubble size scales with the number of public water points; colour indicates coverage tier. <strong>Kigabiro</strong> stands out with 5,411 household connections and 100% coverage. Most sectors cluster at low HH connections (&lt;500) with mid-range coverage, suggesting communal standpipes dominate over household connections. <strong>Karenge</strong> (2,768 HH connections, 41% coverage) is an outlier — indicating that HH connections alone do not guarantee population-wide coverage.</div>
+    </div>
   </div>
-  <div class="chart-card"><div id="fig_network" style="height:440px"></div></div>
+  <div class="chart-card">
+    <div id="fig_network" style="height:440px"></div>
+    <div class="insight"><strong>Reading this chart:</strong> Network pipe length (km) does not directly predict coverage. <strong>Muyumbu</strong> has the longest network (1,231 km) yet the lowest coverage (29%), indicating that existing pipes are poorly distributed, ageing, or non-functional. Conversely, <strong>Munyaga</strong> achieves 100% coverage with just 81 km — demonstrating that strategic network design and maintenance quality outweigh raw infrastructure quantity.</div>
+  </div>
 </div>
 
 <!-- SECTION 3 -->
@@ -95,12 +114,24 @@
     due to affordability constraints, unreliable supply, and physical access barriers.
   </div>
   <div class="grid-2">
-    <div class="chart-card"><div id="fig_gauge" style="height:330px"></div></div>
-    <div class="chart-card"><div id="fig_target" style="height:330px"></div></div>
+    <div class="chart-card">
+      <div id="fig_gauge" style="height:330px"></div>
+      <div class="insight"><strong>Reading this gauge:</strong> The needle shows mean household water consumption at <strong>29 L/capita/day</strong>, exceeding Rwanda's national minimum of 20 L/c/d (red threshold line). The green zone (20–29 L/c/d) confirms the district average is above the minimum. However, this average masks deep inequality — households in underserved sectors with unreliable supply consume far less, while well-connected urban households skew the mean upward.</div>
+    </div>
+    <div class="chart-card">
+      <div id="fig_target" style="height:330px"></div>
+      <div class="insight"><strong>Reading this chart:</strong> <strong>60%</strong> of surveyed households (n=150) meet or exceed the 20 L/capita/day national water target, while <strong>40%</strong> remain below it. The below-target group is concentrated in sectors with intermittent supply and high diesel-pumping tariffs, where affordability and physical access barriers limit daily consumption despite infrastructure presence.</div>
+    </div>
   </div>
   <div class="grid-2">
-    <div class="chart-card"><div id="fig_reliability" style="height:370px"></div></div>
-    <div class="chart-card"><div id="fig_satisfaction" style="height:370px"></div></div>
+    <div class="chart-card">
+      <div id="fig_reliability" style="height:370px"></div>
+      <div class="insight"><strong>Reading this chart:</strong> An alarming <strong>88%</strong> of improved water sources supply water for only <strong>1–2 days per week</strong> — far below the RURA-mandated 24-hour daily supply. Only <strong>5%</strong> (boreholes and protected springs) offer reliable daily access. Chronic intermittency forces households to queue, store water in unsafe containers, or fall back on unimproved sources, compounding health risks and time burdens, particularly for women and children.</div>
+    </div>
+    <div class="chart-card">
+      <div id="fig_satisfaction" style="height:370px"></div>
+      <div class="insight"><strong>Reading this chart:</strong> Only <strong>47.5%</strong> of surveyed households expressed satisfaction with water quantity and service. <strong>37.5%</strong> are dissatisfied — directly reflecting the widespread supply intermittency. The <strong>15%</strong> neutral response likely represents households with seasonal variation in satisfaction, satisfied during rainy season but struggling during dry months when supply pressure drops further.</div>
+    </div>
   </div>
 </div>
 
@@ -113,8 +144,14 @@
     (338 RWF/m³) — creating significant inequity between well-served and remote areas.
   </div>
   <div class="grid-2">
-    <div class="chart-card"><div id="fig_wasac" style="height:430px"></div></div>
-    <div class="chart-card"><div id="fig_rural" style="height:430px"></div></div>
+    <div class="chart-card">
+      <div id="fig_wasac" style="height:430px"></div>
+      <div class="insight"><strong>Reading this chart:</strong> WASAC's urban piped water tariff structure (VAT exclusive) is progressive. <strong>Public taps</strong> have the lowest flat rate (323 RWF/m³), promoting equitable access for the poorest households. Residential tariffs increase from <strong>340 RWF/m³</strong> (0–5 m³) to <strong>877 RWF/m³</strong> (&gt;50 m³), discouraging wasteful consumption. Industrial consumers pay a flat 736 RWF/m³. This progressive structure rewards conservation and cross-subsidises low-income users.</div>
+    </div>
+    <div class="chart-card">
+      <div id="fig_rural" style="height:430px"></div>
+      <div class="insight"><strong>Reading this chart:</strong> Rural water costs vary sharply by system type. <strong>Gravity-fed systems</strong> — used in accessible terrain — are the most affordable at 338 RWF/m³ (incl. VAT). <strong>Diesel-pumped systems</strong>, common in remote areas, cost <strong>1,087 RWF/m³</strong> — over 3× the gravity rate. This creates a perverse pricing structure where the poorest, most remote communities pay the highest prices for water. Targeted subsidies for diesel-system users are a key policy recommendation.</div>
+    </div>
   </div>
 </div>
 
@@ -140,6 +177,17 @@
     <strong>Equity in Pricing:</strong> Progressive tariff reform and targeted subsidies are
     recommended to reduce the cost differential between gravity and diesel-pumped networks,
     which disproportionately burden remote rural communities.
+  </div>
+</div>
+
+<!-- SECTION 6 – GIS MAP -->
+<div class="section">
+  <div class="section-title">6. GIS Map: Water Access Coverage by Sector (Satellite View)</div>
+  <div class="callout">
+    <strong>Satellite Map:</strong> Circle markers are coloured by coverage tier — <span style="color:#ef4444;font-weight:600">Red (&lt;40%)</span>, <span style="color:#f59e0b;font-weight:600">Amber (40–49%)</span>, <span style="color:#0d9488;font-weight:600">Teal (50–74%)</span>, <span style="color:#22c55e;font-weight:600">Green (≥75%)</span>. Marker size reflects relative population size. Click any marker to see full sector details.
+  </div>
+  <div class="chart-card" style="padding:0;overflow:hidden;border-radius:12px">
+    <div id="map" style="height:600px;width:100%;border-radius:12px"></div>
   </div>
 </div>
 
@@ -178,7 +226,7 @@ function covColor(p){
 }
 
 const BG="#f8fafc", TEAL="#0d9488", AMBER="#f59e0b", RED="#ef4444", BLUE="#3b82f6";
-const layout0 = {plot_bgcolor:BG, paper_bgcolor:"white", margin:{l:10,r:40,t:50,b:40}};
+const layout0 = {plot_bgcolor:BG, paper_bgcolor:"white", margin:{l:120,r:40,t:50,b:40}};
 
 // ============================================================
 // FIG 1 – Coverage bar
@@ -196,7 +244,7 @@ Plotly.newPlot("fig_coverage",[{
   ...layout0,
   title:{text:"Water Service Coverage by Sector (%)",font:{size:16}},
   xaxis:{title:"Coverage (%)", range:[0,118]},
-  yaxis:{title:""},
+  yaxis:{title:"", automargin:true},
   height:520,
   shapes:[{type:"line",x0:100,x1:100,y0:-0.5,y1:13.5,line:{color:"#94a3b8",dash:"dot",width:2}}],
   annotations:[{x:100,y:13.5,text:"100% target",showarrow:false,xanchor:"left",xshift:5,font:{color:"#64748b",size:11}}]
@@ -225,7 +273,7 @@ Plotly.newPlot("fig_population",[
   barmode:"stack",
   title:{text:"Served vs Unserved Population per Sector",font:{size:16}},
   xaxis:{title:"Population"},
-  yaxis:{title:""},
+  yaxis:{title:"", automargin:true},
   height:520,
   legend:{orientation:"h",y:-0.1}
 });
@@ -246,9 +294,8 @@ Plotly.newPlot("fig_pwp",[{
   ...layout0,
   title:{text:"Number of Public Water Points per Sector",font:{size:16}},
   xaxis:{title:"Count", range:[0,95]},
-  yaxis:{title:""},
-  height:500,
-  margin:{l:10,r:40,t:50,b:40}
+  yaxis:{title:"", automargin:true},
+  height:500
 });
 
 // ============================================================
@@ -425,5 +472,141 @@ Plotly.newPlot("fig_rural",[
   legend:{orientation:"h",y:-0.18}
 });
 </script>
+
+<script>
+// ============================================================
+// LEAFLET MAP – ESRI Satellite Hybrid + Sector Markers
+// ============================================================
+window.addEventListener('load', function(){
+  if(typeof L === 'undefined'){ console.error('Leaflet failed to load'); return; }
+  const mapSectors = [
+    {s:"Muyumbu",    lat:-1.876, lng:30.399, cov:29,  pop:32755, srv:9499,  pwp:12, hh:2106},
+    {s:"Nyakaliro",  lat:-1.932, lng:30.295, cov:37,  pop:27645, srv:10229, pwp:16, hh:659},
+    {s:"Nzige",      lat:-2.032, lng:30.390, cov:38,  pop:18588, srv:7064,  pwp:12, hh:654},
+    {s:"Karenge",    lat:-1.960, lng:30.500, cov:41,  pop:27537, srv:12117, pwp:20, hh:2768},
+    {s:"Muhazi",     lat:-1.845, lng:30.455, cov:44,  pop:31492, srv:12912, pwp:21, hh:1233},
+    {s:"Gahengeri",  lat:-2.020, lng:30.318, cov:47,  pop:30384, srv:11546, pwp:30, hh:54},
+    {s:"Munyiginya", lat:-1.995, lng:30.457, cov:50,  pop:22836, srv:11418, pwp:21, hh:198},
+    {s:"Musha",      lat:-2.010, lng:30.540, cov:50,  pop:26465, srv:13233, pwp:23, hh:198},
+    {s:"Mwulire",    lat:-1.925, lng:30.370, cov:50,  pop:28396, srv:14198, pwp:27, hh:87},
+    {s:"Gishari",    lat:-2.055, lng:30.465, cov:54,  pop:29211, srv:15774, pwp:26, hh:1311},
+    {s:"Fumbwe",     lat:-1.985, lng:30.382, cov:73,  pop:28037, srv:20467, pwp:45, hh:165},
+    {s:"Rubona",     lat:-1.972, lng:30.448, cov:76,  pop:29574, srv:22477, pwp:51, hh:53},
+    {s:"Kigabiro",   lat:-1.949, lng:30.435, cov:100, pop:38865, srv:38865, pwp:31, hh:5411},
+    {s:"Munyaga",    lat:-2.018, lng:30.450, cov:100, pop:20728, srv:20728, pwp:80, hh:167}
+  ];
+
+  function markerColor(cov){
+    if(cov>=75) return "#22c55e";
+    if(cov>=50) return "#0d9488";
+    if(cov>=40) return "#f59e0b";
+    return "#ef4444";
+  }
+  function tierLabel(cov){
+    if(cov>=75) return "High (\u226575%)";
+    if(cov>=50) return "Medium (50\u201374%)";
+    if(cov>=40) return "Low-Medium (40\u201349%)";
+    return "Critical (<40%)";
+  }
+
+  const map = L.map("map",{center:[-1.965,30.435],zoom:11});
+
+  // ESRI World Imagery – Satellite base layer (no API key required)
+  L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{
+    maxZoom:19,
+    attribution:'Tiles &copy; <a href="https://www.esri.com">Esri</a>, Maxar, Earthstar Geographics'
+  }).addTo(map);
+
+  // ESRI Reference overlay – place names & roads on top (creates hybrid look)
+  L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",{
+    maxZoom:19,
+    opacity:0.85,
+    attribution:''
+  }).addTo(map);
+
+  // Sector circle markers
+  mapSectors.forEach(function(d){
+    const col = markerColor(d.cov);
+    const unserved = d.pop - d.srv;
+    const radius = Math.sqrt(d.pop) * 0.38;   // scale radius by population
+
+    const circle = L.circleMarker([d.lat, d.lng],{
+      radius: Math.max(radius, 14),
+      fillColor: col,
+      color: "#ffffff",
+      weight: 2,
+      opacity: 1,
+      fillOpacity: 0.82
+    }).addTo(map);
+
+    circle.bindPopup(
+      "<div style='font-family:Segoe UI,sans-serif;min-width:210px'>" +
+        "<div style='background:"+col+";color:white;padding:7px 11px;border-radius:6px 6px 0 0;margin:-14px -20px 10px;font-weight:700;font-size:1rem'>" +
+          d.s + " Sector" +
+        "</div>" +
+        "<table style='width:100%;border-collapse:collapse;font-size:.85rem'>" +
+          "<tr><td style='padding:3px 6px;color:#64748b'>Coverage</td>" +
+               "<td style='padding:3px 6px;font-weight:700;color:"+col+"'>"+d.cov+"%</td></tr>" +
+          "<tr style='background:#f8fafc'><td style='padding:3px 6px;color:#64748b'>Tier</td>" +
+               "<td style='padding:3px 6px'>"+tierLabel(d.cov)+"</td></tr>" +
+          "<tr><td style='padding:3px 6px;color:#64748b'>Total Population</td>" +
+               "<td style='padding:3px 6px'>"+d.pop.toLocaleString()+"</td></tr>" +
+          "<tr style='background:#f8fafc'><td style='padding:3px 6px;color:#64748b'>Served</td>" +
+               "<td style='padding:3px 6px;color:#22c55e;font-weight:600'>"+d.srv.toLocaleString()+"</td></tr>" +
+          "<tr><td style='padding:3px 6px;color:#64748b'>Unserved</td>" +
+               "<td style='padding:3px 6px;color:#ef4444;font-weight:600'>"+unserved.toLocaleString()+"</td></tr>" +
+          "<tr style='background:#f8fafc'><td style='padding:3px 6px;color:#64748b'>Public Water Points</td>" +
+               "<td style='padding:3px 6px'>"+d.pwp+"</td></tr>" +
+          "<tr><td style='padding:3px 6px;color:#64748b'>HH Connections</td>" +
+               "<td style='padding:3px 6px'>"+d.hh.toLocaleString()+"</td></tr>" +
+        "</table>" +
+      "</div>",
+      {maxWidth:260}
+    );
+
+    // Permanent sector-name tooltip
+    circle.bindTooltip(d.s,{
+      permanent:true, direction:"center",
+      className:"sector-lbl", offset:[0,0]
+    });
+  });
+
+  // Legend
+  const legend = L.control({position:"bottomright"});
+  legend.onAdd = function(){
+    const div = L.DomUtil.create("div","map-legend");
+    div.innerHTML =
+      "<div style='background:rgba(255,255,255,0.95);padding:12px 16px;border-radius:8px;" +
+           "box-shadow:0 2px 8px rgba(0,0,0,.25);font-family:Segoe UI,sans-serif;font-size:.82rem'>" +
+        "<div style='font-weight:700;margin-bottom:8px;color:#1e293b'>Coverage Tier</div>" +
+        [["#22c55e","\u226575% — High"],["#0d9488","50–74% — Medium"],
+         ["#f59e0b","40–49% — Low-Medium"],["#ef4444","<40% — Critical"]]
+          .map(function(r){
+            return "<div style='display:flex;align-items:center;gap:7px;margin-bottom:5px'>" +
+              "<span style='width:13px;height:13px;border-radius:50%;background:"+r[0]+";flex-shrink:0;border:2px solid white;box-shadow:0 0 0 1px #ccc'></span>" +
+              "<span style='color:#334155'>"+r[1]+"</span></div>";
+          }).join("") +
+        "<div style='margin-top:8px;border-top:1px solid #e2e8f0;padding-top:7px;color:#64748b'>" +
+          "Marker size \u221d population</div>" +
+      "</div>";
+    return div;
+  };
+  legend.addTo(map);
+  setTimeout(function(){ map.invalidateSize(); }, 200);
+});
+</script>
+
+<style>
+  .sector-lbl{
+    background:transparent!important;
+    border:none!important;
+    box-shadow:none!important;
+    color:#fff;
+    font-size:.7rem;
+    font-weight:700;
+    text-shadow:0 1px 3px rgba(0,0,0,.9),0 0 6px rgba(0,0,0,.7);
+    pointer-events:none;
+  }
+</style>
 </body>
 </html>
